@@ -1,4 +1,4 @@
-package com.enolj.scheduleprojectdevelop.schedule.entity;
+package com.enolj.scheduleprojectdevelop.global.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

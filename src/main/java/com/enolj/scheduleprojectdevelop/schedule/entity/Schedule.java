@@ -1,8 +1,8 @@
 package com.enolj.scheduleprojectdevelop.schedule.entity;
 
+import com.enolj.scheduleprojectdevelop.global.common.BaseEntity;
 import com.enolj.scheduleprojectdevelop.schedule.dto.CreateScheduleRequest;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import lombok.*;
 
 @Getter

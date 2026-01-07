@@ -2,6 +2,7 @@ package com.enolj.scheduleprojectdevelop.schedule.controller;
 
 import com.enolj.scheduleprojectdevelop.schedule.dto.CreateScheduleRequest;
 import com.enolj.scheduleprojectdevelop.schedule.dto.CreateScheduleResponse;
+import com.enolj.scheduleprojectdevelop.schedule.dto.GetScheduleResponse;
 import com.enolj.scheduleprojectdevelop.schedule.dto.GetSchedulesResponse;
 import com.enolj.scheduleprojectdevelop.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
@@ -28,5 +29,11 @@ public class ScheduleController {
     public ResponseEntity<List<GetSchedulesResponse>> getAll(@RequestParam(required = false) String author) {
         List<GetSchedulesResponse> responseList = scheduleService.findAll(author);
         return ResponseEntity.ok(responseList);
+    }
+
+    @GetMapping("/schedules/{scheduleId}")
+    public ResponseEntity<GetScheduleResponse> getOne(@PathVariable Long scheduleId) {
+        GetScheduleResponse response = scheduleService.findById(scheduleId);
+        return ResponseEntity.ok(response);
     }
 }

@@ -1,9 +1,12 @@
 package com.enolj.scheduleprojectdevelop.schedule.service;
 
+import com.enolj.scheduleprojectdevelop.global.exception.ErrorCode;
 import com.enolj.scheduleprojectdevelop.schedule.dto.CreateScheduleRequest;
 import com.enolj.scheduleprojectdevelop.schedule.dto.CreateScheduleResponse;
+import com.enolj.scheduleprojectdevelop.schedule.dto.GetScheduleResponse;
 import com.enolj.scheduleprojectdevelop.schedule.dto.GetSchedulesResponse;
 import com.enolj.scheduleprojectdevelop.schedule.entity.Schedule;
+import com.enolj.scheduleprojectdevelop.schedule.exception.ScheduleNotFoundException;
 import com.enolj.scheduleprojectdevelop.schedule.repository.ScheduleRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +37,12 @@ public class ScheduleService {
         return schedules.stream()
                 .map(GetSchedulesResponse::from)
                 .toList();
+    }
+
+    public GetScheduleResponse findById(Long scheduleId) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+                () -> new ScheduleNotFoundException(ErrorCode.SCHEDULE_NOT_FOUND)
+        );
+        return GetScheduleResponse.from(schedule);
     }
 }
