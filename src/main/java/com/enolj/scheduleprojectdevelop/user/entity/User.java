@@ -2,7 +2,9 @@ package com.enolj.scheduleprojectdevelop.user.entity;
 
 import com.enolj.scheduleprojectdevelop.global.common.BaseEntity;
 import com.enolj.scheduleprojectdevelop.user.dto.SignupUserRequest;
+import com.enolj.scheduleprojectdevelop.user.dto.UpdateUserRequest;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -29,5 +31,14 @@ public class User extends BaseEntity {
                 .email(request.getEmail())
                 .password(request.getPassword())
                 .build();
+    }
+
+    public boolean matchPassword(String currentPassword) {
+        return this.password.equals(currentPassword);
+    }
+
+    public void update(UpdateUserRequest request) {
+        this.name = request.getName() == null ? this.name : request.getName();
+        this.password = request.getNewPassword() == null ? this.password : request.getNewPassword();
     }
 }

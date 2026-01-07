@@ -1,12 +1,10 @@
 package com.enolj.scheduleprojectdevelop.user.service;
 
 import com.enolj.scheduleprojectdevelop.global.exception.ErrorCode;
-import com.enolj.scheduleprojectdevelop.user.dto.GetUserResponse;
-import com.enolj.scheduleprojectdevelop.user.dto.GetUsersResponse;
-import com.enolj.scheduleprojectdevelop.user.dto.SignupUserRequest;
-import com.enolj.scheduleprojectdevelop.user.dto.SignupUserResponse;
+import com.enolj.scheduleprojectdevelop.user.dto.*;
 import com.enolj.scheduleprojectdevelop.user.entity.User;
 import com.enolj.scheduleprojectdevelop.user.exception.DuplicateEmailException;
+import com.enolj.scheduleprojectdevelop.user.exception.NotMatchPasswordException;
 import com.enolj.scheduleprojectdevelop.user.exception.UserNotFoundException;
 import com.enolj.scheduleprojectdevelop.user.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -45,6 +43,19 @@ public class UserService {
     public GetUserResponse findOne(Long userId) {
         User user = findById(userId);
         return GetUserResponse.from(user);
+    }
+
+    @Transactional
+    public UpdateUserResponse update(Long userId, UpdateUserRequest request) {
+        User user = findById(userId);
+        if (!user.matchPassword(request.getCurrentPassword())) {
+            throw new NotMatchPasswordException(ErrorCode.NOT_MATCH_PASSWORD);
+        }
+        user.update(request);
+
+        // 수정일 적용을 위한 flush()
+        userRepository.flush();
+        return UpdateUserResponse.from(user);
     }
 
     private User findById(Long userId) {
