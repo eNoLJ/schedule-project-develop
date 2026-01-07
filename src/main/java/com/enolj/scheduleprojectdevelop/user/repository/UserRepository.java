@@ -8,4 +8,6 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsUserByEmail(String email);
+
+    List<User> findAllByOrderByModifiedAtDesc();
 }

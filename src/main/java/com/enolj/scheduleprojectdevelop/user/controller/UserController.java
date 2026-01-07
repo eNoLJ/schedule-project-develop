@@ -26,4 +26,10 @@ public class UserController {
         SignupUserResponse response = userService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<GetUsersResponse>> getAll() {
+        List<GetUsersResponse> response = userService.findAll();
+        return ResponseEntity.ok(response);
+    }
 }

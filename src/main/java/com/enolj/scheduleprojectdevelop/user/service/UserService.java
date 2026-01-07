@@ -30,4 +30,12 @@ public class UserService {
         userRepository.save(user);
         return SignupUserResponse.from(user);
     }
+
+    @Transactional(readOnly = true)
+    public List<GetUsersResponse> findAll() {
+        List<User> users = userRepository.findAllByOrderByModifiedAtDesc();
+        return users.stream()
+                .map(GetUsersResponse::from)
+                .toList();
+    }
 }
