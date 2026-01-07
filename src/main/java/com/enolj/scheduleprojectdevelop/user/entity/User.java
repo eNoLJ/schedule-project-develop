@@ -4,7 +4,6 @@ import com.enolj.scheduleprojectdevelop.global.common.BaseEntity;
 import com.enolj.scheduleprojectdevelop.user.dto.SignupUserRequest;
 import com.enolj.scheduleprojectdevelop.user.dto.UpdateUserRequest;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -33,7 +32,7 @@ public class User extends BaseEntity {
                 .build();
     }
 
-    public boolean matchPassword(String currentPassword) {
+    public boolean matchesPassword(String currentPassword) {
         return this.password.equals(currentPassword);
     }
 

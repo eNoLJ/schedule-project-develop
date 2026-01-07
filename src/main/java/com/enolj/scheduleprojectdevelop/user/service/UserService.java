@@ -7,7 +7,6 @@ import com.enolj.scheduleprojectdevelop.user.exception.DuplicateEmailException;
 import com.enolj.scheduleprojectdevelop.user.exception.NotMatchPasswordException;
 import com.enolj.scheduleprojectdevelop.user.exception.UserNotFoundException;
 import com.enolj.scheduleprojectdevelop.user.repository.UserRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,9 +47,7 @@ public class UserService {
     @Transactional
     public UpdateUserResponse update(Long userId, UpdateUserRequest request) {
         User user = findById(userId);
-        if (!user.matchPassword(request.getCurrentPassword())) {
-            throw new NotMatchPasswordException(ErrorCode.NOT_MATCH_PASSWORD);
-        }
+        validatePassword(user, request.getCurrentPassword());
         user.update(request);
 
         // 수정일 적용을 위한 flush()
@@ -58,9 +55,22 @@ public class UserService {
         return UpdateUserResponse.from(user);
     }
 
+    @Transactional
+    public void delete(Long userId, DeleteUserRequest request) {
+        User user = findById(userId);
+        validatePassword(user, request.getPassword());
+        userRepository.delete(user);
+    }
+
     private User findById(Long userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
         );
+    }
+
+    private void validatePassword(User user, String password) {
+        if (!user.matchesPassword(password)) {
+            throw new NotMatchPasswordException(ErrorCode.NOT_MATCH_PASSWORD);
+        }
     }
 }
