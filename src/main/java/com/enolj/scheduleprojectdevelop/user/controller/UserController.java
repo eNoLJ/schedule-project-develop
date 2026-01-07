@@ -1,5 +1,6 @@
 package com.enolj.scheduleprojectdevelop.user.controller;
 
+import com.enolj.scheduleprojectdevelop.user.dto.GetUserResponse;
 import com.enolj.scheduleprojectdevelop.user.dto.GetUsersResponse;
 import com.enolj.scheduleprojectdevelop.user.dto.SignupUserRequest;
 import com.enolj.scheduleprojectdevelop.user.dto.SignupUserResponse;
@@ -8,10 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,6 +28,12 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<List<GetUsersResponse>> getAll() {
         List<GetUsersResponse> response = userService.findAll();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<GetUserResponse> getOne(@PathVariable Long userId) {
+        GetUserResponse response = userService.findOne(userId);
         return ResponseEntity.ok(response);
     }
 }
