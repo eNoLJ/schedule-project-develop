@@ -2,6 +2,7 @@ package com.enolj.scheduleprojectdevelop.user.controller;
 
 import com.enolj.scheduleprojectdevelop.user.dto.*;
 import com.enolj.scheduleprojectdevelop.user.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,13 @@ public class UserController {
     public ResponseEntity<SignupUserResponse> signup(@Valid @RequestBody SignupUserRequest request) {
         SignupUserResponse response = userService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<SessionUser> login(@Valid @RequestBody LoginUserRequest request, HttpSession session) {
+        SessionUser sessionUser = userService.login(request);
+        session.setAttribute("loginUser", sessionUser);
+        return ResponseEntity.ok(sessionUser);
     }
 
     @GetMapping("/users")

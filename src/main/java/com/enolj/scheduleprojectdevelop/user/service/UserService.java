@@ -4,6 +4,7 @@ import com.enolj.scheduleprojectdevelop.global.exception.ErrorCode;
 import com.enolj.scheduleprojectdevelop.user.dto.*;
 import com.enolj.scheduleprojectdevelop.user.entity.User;
 import com.enolj.scheduleprojectdevelop.user.exception.DuplicateEmailException;
+import com.enolj.scheduleprojectdevelop.user.exception.LoginFailedException;
 import com.enolj.scheduleprojectdevelop.user.exception.NotMatchPasswordException;
 import com.enolj.scheduleprojectdevelop.user.exception.UserNotFoundException;
 import com.enolj.scheduleprojectdevelop.user.repository.UserRepository;
@@ -72,5 +73,12 @@ public class UserService {
         if (!user.matchesPassword(password)) {
             throw new NotMatchPasswordException(ErrorCode.NOT_MATCH_PASSWORD);
         }
+    }
+
+    public SessionUser login(LoginUserRequest request) {
+        User user = userRepository.findByEmailAndPassword(request.getEmail(), request.getPassword()).orElseThrow(
+                () -> new LoginFailedException(ErrorCode.LOGIN_FAILED)
+        );
+        return SessionUser.from(user);
     }
 }
