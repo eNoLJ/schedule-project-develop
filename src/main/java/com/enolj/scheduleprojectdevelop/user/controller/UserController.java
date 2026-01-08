@@ -37,20 +37,26 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<GetUserResponse> getOne(@PathVariable Long userId) {
-        GetUserResponse response = userService.findOne(userId);
+    public ResponseEntity<GetUserResponse> getOne(@SessionAttribute(name = "loginUser") SessionUser sessionUser) {
+        GetUserResponse response = userService.findOne(sessionUser);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/users/{userId}")
-    public ResponseEntity<UpdateUserResponse> update(@PathVariable Long userId, @Valid @RequestBody UpdateUserRequest request) {
-        UpdateUserResponse response = userService.update(userId, request);
+    public ResponseEntity<UpdateUserResponse> update(
+            @SessionAttribute(name = "loginUser") SessionUser sessionUser,
+            @Valid @RequestBody UpdateUserRequest request
+    ) {
+        UpdateUserResponse response = userService.update(sessionUser, request);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity<Void> delete(@PathVariable Long userId, @Valid @RequestBody DeleteUserRequest request) {
-        userService.delete(userId, request);
+    public ResponseEntity<Void> delete(
+            @SessionAttribute(name = "loginUser") SessionUser sessionUser,
+            @Valid @RequestBody DeleteUserRequest request
+    ) {
+        userService.delete(sessionUser, request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -40,14 +40,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public GetUserResponse findOne(Long userId) {
-        User user = findById(userId);
+    public GetUserResponse findOne(SessionUser sessionUser) {
+        User user = findById(sessionUser.getId());
         return GetUserResponse.from(user);
     }
 
     @Transactional
-    public UpdateUserResponse update(Long userId, UpdateUserRequest request) {
-        User user = findById(userId);
+    public UpdateUserResponse update(SessionUser sessionUser, UpdateUserRequest request) {
+        User user = findById(sessionUser.getId());
         validatePassword(user, request.getCurrentPassword());
         user.update(request);
 
@@ -57,8 +57,8 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(Long userId, DeleteUserRequest request) {
-        User user = findById(userId);
+    public void delete(SessionUser sessionUser, DeleteUserRequest request) {
+        User user = findById(sessionUser.getId());
         validatePassword(user, request.getPassword());
         userRepository.delete(user);
     }
