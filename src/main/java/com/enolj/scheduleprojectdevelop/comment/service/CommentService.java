@@ -2,6 +2,7 @@ package com.enolj.scheduleprojectdevelop.comment.service;
 
 import com.enolj.scheduleprojectdevelop.comment.dto.CreateCommentRequest;
 import com.enolj.scheduleprojectdevelop.comment.dto.CreateCommentResponse;
+import com.enolj.scheduleprojectdevelop.comment.dto.GetCommentsResponse;
 import com.enolj.scheduleprojectdevelop.comment.entity.Comment;
 import com.enolj.scheduleprojectdevelop.comment.repository.CommentRepository;
 import com.enolj.scheduleprojectdevelop.schedule.entity.Schedule;
@@ -12,6 +13,8 @@ import com.enolj.scheduleprojectdevelop.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,5 +31,12 @@ public class CommentService {
         Comment comment = Comment.from(user, schedule, request);
         commentRepository.save(comment);
         return CreateCommentResponse.from(comment);
+    }
+
+    public List<GetCommentsResponse> findAll(Long scheduleId) {
+        List<Comment> comments = commentRepository.findAllByScheduleId(scheduleId);
+        return comments.stream()
+                .map(GetCommentsResponse::from)
+                .toList();
     }
 }

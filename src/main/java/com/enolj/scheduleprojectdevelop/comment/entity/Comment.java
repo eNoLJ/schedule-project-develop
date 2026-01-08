@@ -35,4 +35,8 @@ public class Comment extends BaseEntity {
                 .schedule(schedule)
                 .build();
     }
+
+    public String getUserName() {
+        return this.user.getName();
+    }
 }
