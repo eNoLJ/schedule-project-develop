@@ -13,6 +13,7 @@ public class GetScheduleResponse {
     private final Long id;
     private final String title;
     private final String description;
+    private final String author;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
@@ -21,6 +22,7 @@ public class GetScheduleResponse {
                 .id(schedule.getId())
                 .title(schedule.getTitle())
                 .description(schedule.getDescription())
+                .author(schedule.getUserName())
                 .createdAt(schedule.getCreatedAt())
                 .modifiedAt(schedule.getModifiedAt())
                 .build();

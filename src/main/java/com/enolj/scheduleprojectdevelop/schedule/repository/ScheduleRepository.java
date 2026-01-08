@@ -9,5 +9,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
     List<Schedule> findAllByOrderByModifiedAtDesc();
 
-    List<Schedule> findAllByAuthorOrderByModifiedAtDesc(String author);
+    List<Schedule> findAllByUser_NameOrderByModifiedAtDesc(String userName);
 }

@@ -22,7 +22,7 @@ public class CreateScheduleResponse {
                 .id(schedule.getId())
                 .title(schedule.getTitle())
                 .description(schedule.getDescription())
-                .author(schedule.getAuthor())
+                .author(schedule.getUserName())
                 .createdAt(schedule.getCreatedAt())
                 .modifiedAt(schedule.getModifiedAt())
                 .build();

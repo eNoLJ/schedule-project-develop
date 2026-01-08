@@ -10,6 +10,7 @@ public enum ErrorCode {
 
     // schedule exception
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 스케줄을 찾을 수 없습니다."),
+    USER_NOT_MATCH(HttpStatus.UNAUTHORIZED, "유저가 일치하지 않습니다."),
 
     // user exception
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "중복 된 이메일입니다."),
