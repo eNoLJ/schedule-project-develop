@@ -24,11 +24,11 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    public static User from(SignupUserRequest request) {
+    public static User from(SignupUserRequest request, String encodingPassword) {
         return User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(encodingPassword)
                 .build();
     }
 

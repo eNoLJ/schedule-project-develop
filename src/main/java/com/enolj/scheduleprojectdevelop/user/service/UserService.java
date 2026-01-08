@@ -1,5 +1,6 @@
 package com.enolj.scheduleprojectdevelop.user.service;
 
+import com.enolj.scheduleprojectdevelop.global.config.PasswordEncoder;
 import com.enolj.scheduleprojectdevelop.global.exception.ErrorCode;
 import com.enolj.scheduleprojectdevelop.user.dto.*;
 import com.enolj.scheduleprojectdevelop.user.entity.User;
@@ -19,6 +20,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public SignupUserResponse save(SignupUserRequest request) {
@@ -26,9 +28,22 @@ public class UserService {
         if (existence) {
             throw new DuplicateEmailException(ErrorCode.DUPLICATE_EMAIL);
         }
-        User user = User.from(request);
+        User user = User.from(request, passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
         return SignupUserResponse.from(user);
+    }
+
+    @Transactional(readOnly = true)
+    public SessionUser login(LoginUserRequest request) {
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
+                () -> new LoginFailedException(ErrorCode.LOGIN_FAILED)
+        );
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new LoginFailedException(ErrorCode.LOGIN_FAILED);
+        }
+
+        return SessionUser.from(user);
     }
 
     @Transactional(readOnly = true)
@@ -70,15 +85,8 @@ public class UserService {
     }
 
     private void validatePassword(User user, String password) {
-        if (!user.matchesPassword(password)) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new NotMatchPasswordException(ErrorCode.NOT_MATCH_PASSWORD);
         }
-    }
-
-    public SessionUser login(LoginUserRequest request) {
-        User user = userRepository.findByEmailAndPassword(request.getEmail(), request.getPassword()).orElseThrow(
-                () -> new LoginFailedException(ErrorCode.LOGIN_FAILED)
-        );
-        return SessionUser.from(user);
     }
 }
