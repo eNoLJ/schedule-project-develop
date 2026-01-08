@@ -30,6 +30,15 @@ public class UserController {
         return ResponseEntity.ok(sessionUser);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @SessionAttribute(name = "loginUser") SessionUser sessionUser,
+            HttpSession session
+    ) {
+        session.invalidate();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
     @GetMapping("/users")
     public ResponseEntity<List<GetUsersResponse>> getAll() {
         List<GetUsersResponse> response = userService.findAll();
