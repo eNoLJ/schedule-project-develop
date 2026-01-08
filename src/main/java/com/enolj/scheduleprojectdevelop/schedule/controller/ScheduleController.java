@@ -3,6 +3,7 @@ package com.enolj.scheduleprojectdevelop.schedule.controller;
 import com.enolj.scheduleprojectdevelop.schedule.dto.*;
 import com.enolj.scheduleprojectdevelop.schedule.service.ScheduleService;
 import com.enolj.scheduleprojectdevelop.user.dto.SessionUser;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class ScheduleController {
     @PostMapping("/schedules")
     public ResponseEntity<CreateScheduleResponse> create(
             @SessionAttribute(name = "loginUser") SessionUser sessionUser,
-            @RequestBody CreateScheduleRequest request
+            @Valid @RequestBody CreateScheduleRequest request
     ) {
         CreateScheduleResponse response = scheduleService.save(sessionUser, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -41,7 +42,7 @@ public class ScheduleController {
     public ResponseEntity<UpdateScheduleResponse> update(
             @SessionAttribute(name = "loginUser") SessionUser sessionUser,
             @PathVariable Long scheduleId,
-            @RequestBody UpdateScheduleRequest request
+            @Valid @RequestBody UpdateScheduleRequest request
     ) {
         UpdateScheduleResponse response = scheduleService.update(sessionUser, scheduleId, request);
         return ResponseEntity.ok(response);

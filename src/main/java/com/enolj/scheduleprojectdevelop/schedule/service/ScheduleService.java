@@ -68,7 +68,7 @@ public class ScheduleService {
         scheduleRepository.delete(schedule);
     }
 
-    private Schedule findById(Long scheduleId) {
+    public Schedule findById(Long scheduleId) {
         return scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new ScheduleNotFoundException(ErrorCode.SCHEDULE_NOT_FOUND)
         );
