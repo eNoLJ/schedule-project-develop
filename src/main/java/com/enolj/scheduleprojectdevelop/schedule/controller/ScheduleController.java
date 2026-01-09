@@ -27,8 +27,12 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedules")
-    public ResponseEntity<List<GetSchedulesResponse>> getAll(@RequestParam(required = false) String author) {
-        List<GetSchedulesResponse> responseList = scheduleService.findAll(author);
+    public ResponseEntity<List<GetSchedulesResponse>> getAll(
+            @RequestParam(required = false) String author,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        List<GetSchedulesResponse> responseList = scheduleService.findAll(author, page - 1, size);
         return ResponseEntity.ok(responseList);
     }
 
