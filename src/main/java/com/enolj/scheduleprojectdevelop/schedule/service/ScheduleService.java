@@ -1,12 +1,12 @@
 package com.enolj.scheduleprojectdevelop.schedule.service;
 
-import com.enolj.scheduleprojectdevelop.comment.repository.CommentRepository;
 import com.enolj.scheduleprojectdevelop.global.exception.ErrorCode;
 import com.enolj.scheduleprojectdevelop.schedule.dto.*;
 import com.enolj.scheduleprojectdevelop.schedule.entity.Schedule;
 import com.enolj.scheduleprojectdevelop.schedule.exception.ScheduleNotFoundException;
 import com.enolj.scheduleprojectdevelop.schedule.exception.UserNotMatchException;
 import com.enolj.scheduleprojectdevelop.schedule.repository.ScheduleRepository;
+import com.enolj.scheduleprojectdevelop.schedule.repository.ScheduleWithCommentCount;
 import com.enolj.scheduleprojectdevelop.user.dto.SessionUser;
 import com.enolj.scheduleprojectdevelop.user.entity.User;
 import com.enolj.scheduleprojectdevelop.user.service.UserService;
@@ -25,7 +25,6 @@ import java.util.List;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-    private final CommentRepository commentRepository;
     private final UserService userService;
 
     @Transactional
@@ -42,15 +41,11 @@ public class ScheduleService {
         Sort sort = Sort.by(direction, "modifiedAt");
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<Schedule> schedules = (author == null)
-                ? scheduleRepository.findAll(pageable)
-                : scheduleRepository.findAllByUser_Name(author, pageable);
+        Page<ScheduleWithCommentCount> schedules = scheduleRepository.findAllWithCommentCount(author, pageable);
 
         return schedules.stream()
-                .map(schedule -> {
-                    int commentCount = commentRepository.countByScheduleId(schedule.getId());
-                    return GetSchedulesResponse.from(schedule, commentCount);
-                })
+                .map(scheduleWithCommentCount ->
+                        GetSchedulesResponse.from(scheduleWithCommentCount.getSchedule(), (int) scheduleWithCommentCount.getCommentCount()))
                 .toList();
     }
 
