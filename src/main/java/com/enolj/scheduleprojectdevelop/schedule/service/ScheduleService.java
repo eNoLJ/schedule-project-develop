@@ -27,6 +27,9 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserService userService;
 
+    // 일정 생성
+    // 세션 사용자 정보를 기반으로 작성자를 설정
+    // 새로운 일정을 저장하고 응답 DTO로 반환
     @Transactional
     public CreateScheduleResponse save(SessionUser sessionUser, CreateScheduleRequest request) {
         User user = userService.findById(sessionUser.getId());
@@ -35,6 +38,10 @@ public class ScheduleService {
         return CreateScheduleResponse.from(schedule);
     }
 
+    // 일정 목록 조회(페이징)
+    // 수정일 기준 내림차순 정렬
+    // 작성자가 있으면 해당 작성자의 일정만 조회
+    // 각 일정마다 댓글 개수를 함께 조회하여 응답에 포함
     @Transactional(readOnly = true)
     public List<GetSchedulesResponse> findAll(String author, int page, int size) {
         Sort.Direction direction = Sort.Direction.DESC;
@@ -49,13 +56,17 @@ public class ScheduleService {
                 .toList();
     }
 
+    // 일정 단건 조회
+    // 일정 ID를 기준으로 일정 정보 조회
     @Transactional(readOnly = true)
     public GetScheduleResponse findOne(Long scheduleId) {
         Schedule schedule = findById(scheduleId);
         return GetScheduleResponse.from(schedule);
     }
 
-
+    // 일정 수정
+    // 로그인한 사용자와 일정 작성자가 일치하는지 검증
+    // 일정을 업데이트 하고 응답 DTO로 반환
     @Transactional
     public UpdateScheduleResponse update(SessionUser sessionUser, Long scheduleId, UpdateScheduleRequest request) {
         User user = userService.findById(sessionUser.getId());
@@ -68,6 +79,8 @@ public class ScheduleService {
         return UpdateScheduleResponse.from(schedule);
     }
 
+    // 일정 삭제
+    // 로그인한 사용자와 일정 작성자가 일치하는지 검증 후 삭제
     @Transactional
     public void delete(SessionUser sessionUser, Long scheduleId) {
         User user = userService.findById(sessionUser.getId());

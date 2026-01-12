@@ -19,6 +19,9 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    // 댓글 생성 API
+    // 로그인한 사용자만 댓글 생성 가능
+    // 댓글 생성 시 201 created 반환
     @PostMapping("/schedules/{scheduleId}/comments")
     public ResponseEntity<CreateCommentResponse> create(
             @SessionAttribute(name = "loginUser")SessionUser sessionUser,
@@ -29,6 +32,8 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    // 일정에 달린 댓글 조회 API
+    // 일정 Id를 PathVariable로 받아 해당 일정에 달린 댓글 조회
     @GetMapping("/schedules/{scheduleId}/comments")
     public ResponseEntity<List<GetCommentsResponse>> getAll(@PathVariable Long scheduleId) {
         List<GetCommentsResponse> responseList = commentService.findAll(scheduleId);

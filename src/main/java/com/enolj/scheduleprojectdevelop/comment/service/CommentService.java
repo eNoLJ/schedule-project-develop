@@ -24,6 +24,10 @@ public class CommentService {
     private final UserService userService;
     private final ScheduleService scheduleService;
 
+    // 댓글 생성
+    // 로그인한 사용자를 작성자로 설정
+    // 댓글이 달릴 일정을 조회
+    // 댓글 엔티티 생성 후 저장
     @Transactional
     public CreateCommentResponse save(SessionUser sessionUser, Long scheduleId, CreateCommentRequest request) {
         User user = userService.findById(sessionUser.getId());
@@ -33,6 +37,8 @@ public class CommentService {
         return CreateCommentResponse.from(comment);
     }
 
+    // 특정 일정에 달린 댓글 목록 조회
+    // 일정 ID를 기준으로 댓글 목록 조회
     public List<GetCommentsResponse> findAll(Long scheduleId) {
         List<Comment> comments = commentRepository.findAllByScheduleId(scheduleId);
         return comments.stream()
