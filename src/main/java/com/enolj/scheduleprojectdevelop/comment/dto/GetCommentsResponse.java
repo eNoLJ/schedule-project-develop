@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 public class GetCommentsResponse {
 
+    private final Long id;
     private final String description;
     private final String author;
     private final LocalDateTime createdAt;
@@ -17,6 +18,7 @@ public class GetCommentsResponse {
 
     public static GetCommentsResponse from(Comment comment) {
         return GetCommentsResponse.builder()
+                .id(comment.getId())
                 .description(comment.getDescription())
                 .author(comment.getUserName())
                 .createdAt(comment.getCreatedAt())
