@@ -64,7 +64,8 @@ public class UserService {
     public UpdateUserResponse update(SessionUser sessionUser, UpdateUserRequest request) {
         User user = findById(sessionUser.getId());
         validatePassword(user, request.getCurrentPassword());
-        user.update(request);
+        String newPassword = passwordEncoder.encode(request.getNewPassword());
+        user.update(request, newPassword);
 
         // 수정일 적용을 위한 flush()
         userRepository.flush();

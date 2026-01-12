@@ -36,8 +36,8 @@ public class User extends BaseEntity {
         return this.password.equals(currentPassword);
     }
 
-    public void update(UpdateUserRequest request) {
+    public void update(UpdateUserRequest request, String encodingPassword) {
         this.name = request.getName() == null ? this.name : request.getName();
-        this.password = request.getNewPassword() == null ? this.password : request.getNewPassword();
+        this.password = request.getNewPassword() == null ? this.password : encodingPassword;
     }
 }
