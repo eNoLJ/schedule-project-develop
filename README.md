@@ -502,9 +502,9 @@ status code 201 CREATED
 }
 ````
 
-### 1. 댓글 생성
+### 2. 댓글 조회
 
-POST `http://localhost:8080/schedules/1/comments`
+GET `http://localhost:8080/schedules/1/comments`
 
 #### Path variable
 
